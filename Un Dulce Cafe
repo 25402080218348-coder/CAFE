@@ -1,0 +1,35 @@
+# Servicio de Café - Sistema básico en Python
+
+def mostrar_menu():
+    print("\n☕ MENÚ DE CAFÉ ☕")
+    print("1. Espresso - $30")
+    print("2. Americano - $35")
+    print("3. Capuccino - $45")
+    print("4. Latte - $50")
+    print("5. Salir")
+
+def calcular_total(opcion, cantidad):
+    precios = {
+        1: 30,
+        2: 35,
+        3: 45,
+        4: 50
+    }
+    return precios[opcion] * cantidad
+
+while True:
+    mostrar_menu()
+    
+    opcion = int(input("Selecciona una opción: "))
+    
+    if opcion == 5:
+        print("Gracias por visitar nuestro servicio de café ☕")
+        break
+    
+    if opcion in [1, 2, 3, 4]:
+        cantidad = int(input("¿Cuántos cafés deseas?: "))
+        total = calcular_total(opcion, cantidad)
+        print(f"Total a pagar: ${total}")
+        print("¡Pedido realizado con éxito! ☕")
+    else:
+        print("Opción no válida.")
