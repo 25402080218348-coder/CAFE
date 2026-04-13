@@ -1,0 +1,102 @@
+# ☕ Servicio de Café - Sistema mejorado en Python
+
+class CafeService:
+    # Precios definidos una sola vez
+    MENU = {
+        1: {"nombre": "Espresso", "precio": 30},
+        2: {"nombre": "Americano", "precio": 35},
+        3: {"nombre": Capuccino", "precio": 45},
+        4: {"nombre": "Latte", "precio": 50}
+    }
+    
+    def __init__(self):
+        self.pedidos = []  # Historial de pedidos
+        self.total_vendido = 0
+    
+    def mostrar_menu(self):
+        print("\n MENÚ DE CAFÉ ")
+        for opcion, cafe in self.MENU.items():
+            print(f"{opcion}. {cafe['nombre']} - ${cafe['precio']}")
+        print("5. Salir")
+    
+    def calcular_total(self, opcion, cantidad):
+        if opcion not in self.MENU:
+            return None
+        return self.MENU[opcion]["precio"] * cantidad
+    
+    def registrar_pedido(self, opcion, cantidad, total):
+        """Guarda el pedido en el historial"""
+        cafe_nombre = self.MENU[opcion]["nombre"]
+        self.pedidos.append({
+            "cafe": cafe_nombre,
+            "cantidad": cantidad,
+            "total": total
+        })
+        self.total_vendido += total
+    
+    def mostrar_pedido(self, opcion, cantidad, total):
+        cafe_nombre = self.MENU[opcion]["nombre"]
+        print(f"\n RECIBO")
+        print(f"Café: {cafe_nombre}")
+        print(f"Cantidad: {cantidad}")
+        print(f"Precio unitario: ${self.MENU[opcion]['precio']}")
+        print(f"Total a pagar: ${total}")
+        print("¡Pedido realizado con éxito! \n")
+    
+    def ejecutar(self):
+        """Loop principal con manejo de errores"""
+        while True:
+            try:
+                self.mostrar_menu()
+                opcion = int(input("Selecciona una opción: "))
+                
+                if opcion == 5:
+                    self.mostrar_resumen()
+                    break
+                
+                if opcion in self.MENU:
+                    # Validar cantidad
+                    while True:
+                        try:
+                            cantidad = int(input("¿Cuántos cafés deseas?: "))
+                            if cantidad <= 0:
+                                print(" Por favor, ingresa una cantidad positiva.")
+                                continue
+                            break
+                        except ValueError:
+                            print(" Ingresa un número válido.")
+                    
+                    total = self.calcular_total(opcion, cantidad)
+                    self.registrar_pedido(opcion, cantidad, total)
+                    self.mostrar_pedido(opcion, cantidad, total)
+                else:
+                    print(" Opción no válida. Intenta de nuevo.")
+            
+            except ValueError:
+                print(" Ingresa un número válido.")
+            except KeyboardInterrupt:
+                print("\n\n Servicio interrumpido por el usuario.")
+                break
+            except Exception as e:
+                print(f" Error inesperado: {e}")
+    
+    def mostrar_resumen(self):
+        """Muestra resumen final"""
+        print("\n" + "="*40)
+        print(" RESUMEN DEL DÍA")
+        print("="*40)
+        if self.pedidos:
+            for i, pedido in enumerate(self.pedidos, 1):
+                print(f"{i}. {pedido['cafe']} x{pedido['cantidad']} = ${pedido['total']}")
+            print("-"*40)
+            print(f"Total vendido: ${self.total_vendido}")
+        else:
+            print("No hubo pedidos hoy.")
+        print("Gracias por visitar nuestro servicio de café ☕")
+        print("="*40 + "\n")
+
+
+# Ejecutar el programa
+if __name__ == "__main__":
+    cafe = CafeService()
+    cafe.ejecutar()
